@@ -13,6 +13,12 @@ Emacs client for [lsp-intellij-server](https://github.com/Ruin0x11/intellij-lsp-
 
 ## Setup
 Install the package from MELPA. Then load `lsp-mode` in your config and put the following hook afterward:
+
+Content-Length: 533
+
+{"jsonrpc":"2.0","method":"initialize","params":{"processId":47752,"rootPath":"/home/bhj/src/github/Wrench/SetClip/","rootUri":"file:///home/bhj/src/github/Wrench/SetClip/","capabilities":{"workspace":{"applyEdit":true,"executeCommand":{"dynamicRegistration":true}},"textDocument":{"synchronization":{"willSave":true,"didSave":true},"symbol":{"symbolKind":{"valueSet":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]}},"completion":{"completionItem":{"snippetSupport":true}}}},"initializationOptions":null},"id":1}
+
+
 ```emacs-lisp
 (progn
   (add-to-list 'load-path "~/.emacs.d/elpa/dash-20200119.2310/")
@@ -21,6 +27,7 @@ Install the package from MELPA. Then load `lsp-mode` in your config and put the 
   (add-to-list 'load-path "~/.emacs.d/elpa/s-20180406.808/")
   (add-to-list 'load-path "~/src/reading/lsp-mode/")
   (require 'lsp-mode)
+  (setq lsp-print-io t)
   (add-to-list 'load-path "~/src/reading/lsp-intellij")
   (with-eval-after-load 'lsp-mode
     (require 'lsp-intellij)
@@ -38,6 +45,16 @@ Install the package from MELPA. Then load `lsp-mode` in your config and put the 
         company-lsp-cache-candidates t)
   (push 'company-lsp company-backends)
   (push 'java-mode company-global-modes))
+
+(progn
+  (with-eval-after-load 'lsp-mode
+    (require 'lsp-intellij))
+  (require 'lsp-ui)
+  (add-hook 'lsp-after-open-hook #'lsp-ui-mode)
+  (require 'company-lsp)
+  (setq lsp-log-io t)
+  (push 'company-lsp company-backends))
+
 
 
 ```

@@ -564,9 +564,24 @@ status. If VALUE is nil, remove the status from the display."
   (lsp-provide-marked-string-renderer client "java" (lambda (s) (lsp-intellij--render-string s 'java-mode)))
   (lsp-provide-marked-string-renderer client "kotlin" (lambda (s) (lsp-intellij--render-string s 'kotlin-mode))))
 
-(lsp-define-tcp-client lsp-intellij "intellij" #'lsp-intellij--get-root lsp-intellij-dummy-executable
-                       "127.0.0.1" lsp-intellij-server-port
-                       :initialize #'lsp-intellij--initialize-client)
+(defun lsp-intellij-server-start-fun (port)
+  `("lsp-intellij.sh"))
+
+(defun lsp-intellij--ensure-server (_client callback error-callback _update?)
+  (funcall callback))
+
+(lsp-register-client
+ (make-lsp-client :new-connection (flet ((lsp--find-available-port (host port) 8080))
+                                    (lsp-tcp-connection
+                                     (lambda (port) (lsp-intellij-server-start-fun port))))
+                  :major-modes '(java-mode)
+                  :priority -1
+                  :server-id 'intellij
+                  :initialized-fn (lambda (workspace)
+                                    (with-lsp-workspace workspace
+                                      (lsp--set-configuration (lsp-configuration-section "intellij"))))
+                  :download-server-fn #'lsp-intellij--ensure-server))
+
 
 (defun lsp-intellij--set-configuration ()
   "Set the lsp configuration from the current map of config options."
