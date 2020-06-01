@@ -562,8 +562,7 @@ status. If VALUE is nil, remove the status from the display."
   (setq-local lsp-document-sync-method nil)
 
   (lsp-provide-marked-string-renderer client "java" (lambda (s) (lsp-intellij--render-string s 'java-mode)))
-  (lsp-provide-marked-string-renderer client "kotlin" (lambda (s) (lsp-intellij--render-string s 'kotlin-mode)))
-  (lsp-client-register-uri-handler client "jar" 'lsp-intellij--visit-jar-uri))
+  (lsp-provide-marked-string-renderer client "kotlin" (lambda (s) (lsp-intellij--render-string s 'kotlin-mode))))
 
 (lsp-define-tcp-client lsp-intellij "intellij" #'lsp-intellij--get-root lsp-intellij-dummy-executable
                        "127.0.0.1" lsp-intellij-server-port

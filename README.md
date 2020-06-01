@@ -14,9 +14,32 @@ Emacs client for [lsp-intellij-server](https://github.com/Ruin0x11/intellij-lsp-
 ## Setup
 Install the package from MELPA. Then load `lsp-mode` in your config and put the following hook afterward:
 ```emacs-lisp
-(with-eval-after-load 'lsp-mode
-  (require 'lsp-intellij)
-  (add-hook 'java-mode-hook #'lsp-intellij-enable))
+(progn
+  (add-to-list 'load-path "~/.emacs.d/elpa/dash-20200119.2310/")
+  (add-to-list 'load-path "~/.emacs.d/elpa/dash-functional-20191109.1327/")
+  (add-to-list 'load-path "~/.emacs.d/elpa/markdown-mode-20200413.2232/")
+  (add-to-list 'load-path "~/.emacs.d/elpa/s-20180406.808/")
+  (add-to-list 'load-path "~/src/reading/lsp-mode/")
+  (require 'lsp-mode)
+  (add-to-list 'load-path "~/src/reading/lsp-intellij")
+  (with-eval-after-load 'lsp-mode
+    (require 'lsp-intellij)
+    (add-hook 'java-mode-hook #'lsp-intellij-enable))
+  (add-to-list 'load-path "~/.emacs.d/elpa/company-20200324.2145/")
+  (require 'company)
+  (add-to-list 'load-path "~/src/reading/company-lsp")
+  (add-to-list 'load-path "~/.emacs.d/elpa/flycheck-20200405.2310")
+  (add-to-list 'load-path "~/src/reading/lsp-ui")
+  (require 'lsp-ui)
+  (add-hook 'lsp-after-open-hook #'lsp-ui-mode)
+
+  (require 'company-lsp)
+  (setq company-lsp-enable-snippet t
+        company-lsp-cache-candidates t)
+  (push 'company-lsp company-backends)
+  (push 'java-mode company-global-modes))
+
+
 ```
 Finally, start IntelliJ with the [server plugin](https://github.com/Ruin0x11/intellij-lsp-server), then visit a `.java` file tracked by a project you've previously opened in IDEA.
 
