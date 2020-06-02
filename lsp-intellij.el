@@ -589,8 +589,6 @@ status. If VALUE is nil, remove the status from the display."
 
 (add-hook 'lsp-after-initialize-hook 'lsp-intellij--set-configuration)
 
-(add-hook 'lsp-after-diagnostics-hook (lambda () (lsp--update-code-lenses 'lsp-intellij--render-code-lenses)))
-
 
 (defun lsp-intellij-set-config (option value)
   "Set a config OPTION to VALUE in the config option map."
